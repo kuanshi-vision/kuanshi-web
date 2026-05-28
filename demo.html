@@ -3,201 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>宽石 App | 视觉革命</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <title>宽石 App | 极致流畅体验</title>
+    <!-- 使用国内镜像加速加载样式 -->
+    <script src="https://cdn.staticfile.org/tailwindcss@2.2.19/tailwind.min.js"></script>
+    <link href="https://cdn.staticfile.org/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #020617;
-            color: white;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        body { background-color: #020617; color: white; margin: 0; overflow: hidden; font-family: sans-serif; }
+        .snap-container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; }
+        .snap-section { height: 100vh; scroll-snap-align: start; position: relative; overflow: hidden; background: #000; }
+        
+        /* 视频优化：极致覆盖 */
+        .video-bg {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            object-fit: cover; transition: filter 0.5s ease; z-index: 1;
         }
-
-        .snap-container {
-            height: 100vh;
-            overflow-y: scroll;
-            scroll-snap-type: y mandatory;
-            scroll-behavior: smooth;
-        }
-        .snap-section {
-            height: 100vh;
-            scroll-snap-align: start;
-            position: relative;
-            width: 100%;
-            overflow: hidden;
-            background: #000;
-        }
-
-        /* 模拟视频的动态背景图 */
-        .visual-bg {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            transition: filter 0.6s ease, transform 8s linear;
-            z-index: 1;
-            transform: scale(1.1);
-        }
-
-        /* 模拟视频流动的动画 */
-        .animate-video {
-            animation: pan-zoom 20s infinite alternate;
-        }
-
-        @keyframes pan-zoom {
-            0% { transform: scale(1.1) translate(0, 0); }
-            100% { transform: scale(1.3) translate(-2%, -2%); }
-        }
-
-        /* AI 低画质滤镜 */
-        .low-res {
-            filter: blur(12px) saturate(0.6) contrast(0.8);
-        }
-
-        .glass-ui {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(15px);
-            border-radius: 2rem;
-        }
-
+        .low-res { filter: blur(12px) saturate(0.5); }
+        
+        .glass-ui { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(15px); border-radius: 2rem; }
         .ai-boost-btn {
             background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            box-shadow: 0 0 25px rgba(59, 130, 246, 0.7);
-            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
             z-index: 50;
         }
-
-        #comment-panel {
-            transform: translateY(100%);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        #comment-panel.open {
-            transform: translateY(0);
-        }
+        #comment-panel { transform: translateY(100%); transition: transform 0.4s ease; }
+        #comment-panel.open { transform: translateY(0); }
     </style>
 </head>
-<body class="bg-black">
-
+<body>
     <div class="fixed top-0 w-full z-50 flex justify-center space-x-8 py-6 text-sm font-bold opacity-80">
-        <span class="cursor-pointer hover:text-blue-400 transition">关注</span>
-        <span class="text-white border-b-2 border-white pb-1">推荐</span>
-        <span class="cursor-pointer hover:text-blue-400 transition">探索</span>
+        <span>关注</span><span class="border-b-2 border-white">推荐</span><span>探索</span>
     </div>
 
     <div class="snap-container">
-        
-        <!-- 模拟视频页 1 -->
         <div class="snap-section">
-            <div id="vis1" class="visual-bg low-res animate-video" style="background-image: url('https://images.unsplash.com/photo-1611162617213-6d562f266557?auto=format&fit=crop&w=800&q=80');"></div>
+            <!-- 关键修改：使用本地上传的视频文件 -->
+            <video id="vid1" class="video-bg low-res" autoplay muted loop playsinline>
+                <source src="video1.mp4" type="video/mp4">
+                您的浏览器不支持视频播放
+            </video>
             
             <div class="absolute right-4 bottom-32 flex flex-col space-y-6 items-center z-20">
-                <div class="flex flex-col items-center space-y-1">
-                    <div class="w-12 h-12 rounded-full bg-gray-800 border-2 border-white overflow-hidden">
-                        <img src="https://i.pravatar.cc/100?img=1" alt="avatar">
-                    </div>
-                    <div class="text-xs">❤️</div>
-                </div>
-                <div onclick="toggleComments()" class="flex flex-col items-center space-y-1 cursor-pointer">
-                    <div class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center text-xl">💬</div>
-                    <div class="text-xs">1.2k</div>
-                </div>
-                <div class="flex flex-col items-center space-y-1">
-                    <div class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center text-xl">↪️</div>
-                    <div class="text-xs">分享</div>
-                </div>
+                <div class="flex flex-col items-center"><div class="w-12 h-12 rounded-full bg-gray-800 border-2 border-white overflow-hidden"><img src="https://i.pravatar.cc/100?img=1"></div><div class="text-xs">❤️</div></div>
+                <div onclick="toggleComments()" class="flex flex-col items-center cursor-pointer"><div class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center text-xl">💬</div><div class="text-xs">1.2k</div></div>
+                <div class="flex flex-col items-center"><div class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center text-xl">↪️</div><div class="text-xs">分享</div></div>
             </div>
 
             <div class="absolute left-4 bottom-10 z-20 max-w-[70%]">
                 <p class="font-bold text-lg mb-2">@AI_Visionary</p>
-                <p class="text-sm text-gray-200 leading-relaxed">
-                    体验宽石网 8K AI 增强，将数字化视觉推向极限。🚀 #AI视觉 #8K增强
-                </p>
+                <p class="text-sm text-gray-200">体验宽石网 8K AI 增强，定义视觉新维度。🚀 #AI视觉</p>
             </div>
 
             <div class="absolute right-4 top-1/2 transform -translate-y-1/2 z-30">
-                <button onclick="boostQuality('vis1')" class="ai-boost-btn px-4 py-2 rounded-full text-xs font-bold flex items-center space-x-2 animate-bounce">
-                    <span>🪄</span> <span>AI Boost</span>
-                </button>
+                <button onclick="boostQuality('vid1')" class="ai-boost-btn px-4 py-2 rounded-full text-xs font-bold animate-bounce">🪄 AI Boost</button>
             </div>
         </div>
-
-        <!-- 模拟视频页 2 -->
-        <div class="snap-section">
-            <div id="vis2" class="visual-bg low-res animate-video" style="background-image: url('https://images.unsplash.com/photo-1470071459604-1C016662f5f4?auto=format&fit=crop&w=800&q=80');"></div>
-            
-            <div class="absolute right-4 bottom-32 flex flex-col space-y-6 items-center z-20">
-                <div class="flex flex-col items-center space-y-1">
-                    <div class="w-12 h-12 rounded-full bg-gray-800 border-2 border-white overflow-hidden">
-                        <img src="https://i.pravatar.cc/100?img=2" alt="avatar">
-                    </div>
-                    <div class="text-xs">❤️</div>
-                </div>
-                <div onclick="toggleComments()" class="flex flex-col items-center space-y-1 cursor-pointer">
-                    <div class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center text-xl">💬</div>
-                    <div class="text-xs">856</div>
-                </div>
-                <div class="flex flex-col items-center space-y-1">
-                    <div class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center text-xl">↪️</div>
-                    <div class="text-xs">分享</div>
-                </div>
-            </div>
-
-            <div class="absolute left-4 bottom-10 z-20 max-w-[70%]">
-                <p class="font-bold text-lg mb-2">@CyberPunk_World</p>
-                <p class="text-sm text-gray-200 leading-relaxed">
-                    未来已至，宽石网让每一个瞬间都成为艺术大片。🌌 #未来感 #AI剪辑
-                </p>
-            </div>
-
-            <div class="absolute right-4 top-1/2 transform -translate-y-1/2 z-30">
-                <button onclick="boostQuality('vis2')" class="ai-boost-btn px-4 py-2 rounded-full text-xs font-bold flex items-center space-x-2 animate-bounce">
-                    <span>🪄</span> <span>AI Boost</span>
-                </button>
-            </div>
-        </div>
-
     </div>
 
-    <!-- 评论弹窗 -->
     <div id="comment-panel" class="fixed bottom-0 left-0 w-full h-[70vh] glass-ui z-50 p-6 rounded-t-[3rem]">
         <div class="w-12 h-1.5 bg-gray-600 rounded-full mx-auto mb-6 cursor-pointer" onclick="toggleComments()"></div>
         <h3 class="text-xl font-bold mb-6 text-center">评论区</h3>
-        <div class="space-y-6 overflow-y-auto h-[80%] pr-2">
-            <div class="flex space-x-4">
-                <div class="w-10 h-10 rounded-full bg-blue-500 flex-shrink-0"></div>
-                <div class="text-sm">
-                    <p class="font-bold text-blue-400">科技爱好者A</p>
-                    <p class="text-gray-300">这个 AI Boost 效果太震撼了！</p>
-                </div>
-            </div>
-            <div class="flex space-x-4">
-                <div class="w-10 h-10 rounded-full bg-purple-500 flex-shrink-0"></div>
-                <div class="text-sm">
-                    <p class="font-bold text-purple-400">视觉艺术家</p>
-                    <p class="text-gray-300">宽石网定义了下一代视频标准。</p>
-                </div>
-            </div>
+        <div class="space-y-6 overflow-y-auto h-[80%]">
+            <div class="flex space-x-4"><div class="w-10 h-10 rounded-full bg-blue-500"></div><div><p class="text-xs font-bold text-blue-400">科技爱好者A</p><p class="text-sm text-gray-300">这个速度太快了，真正的秒开！</p></div></div>
         </div>
         <div class="fixed bottom-6 left-0 w-full px-6 flex space-x-3">
-            <input type="text" placeholder="说点什么..." class="flex-1 bg-white/10 border border-white/20 rounded-full px-6 py-3 text-sm focus:outline-none text-white">
+            <input type="text" placeholder="说点什么..." class="flex-1 bg-white/10 border border-white/20 rounded-full px-6 py-3 text-sm text-white outline-none">
             <button class="bg-blue-600 px-6 py-3 rounded-full text-sm font-bold">发送</button>
         </div>
     </div>
 
     <script>
         function boostQuality(id) {
-            const vis = document.getElementById(id);
-            vis.classList.toggle('low-res');
+            document.getElementById(id).classList.toggle('low-res');
         }
-
         function toggleComments() {
-            const panel = document.getElementById('comment-panel');
-            panel.classList.toggle('open');
+            document.getElementById('comment-panel').classList.toggle('open');
         }
     </script>
 </body>
