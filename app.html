@@ -3,15 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>宽石网 | Developer Edition</title>
+    <title>宽石网 | AI 视觉之美</title>
     <script src="https://cdn.staticfile.org/tailwindcss@2.2.19/tailwind.min.js"></script>
     <style>
         body { background-color: #020617; color: white; font-family: 'Inter', sans-serif; overflow: hidden; }
         .glass-dark { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(59, 130, 246, 0.2); }
         .blue-gradient { background: linear-gradient(135deg, #3b82f6, #8b5cf6); }
-        .video-container { height: calc(100vh - 40px); position: relative; overflow: hidden; border-radius: 1.5rem; background: #000; }
-        .main-video { width: 100%; height: 100%; object-fit: cover; transition: filter 0.5s ease; }
-        .low-res { filter: blur(12px) saturate(0.5); }
+        
+        /* 核心视觉：模拟视频流动感 */
+        .vision-container { height: calc(100vh - 40px); position: relative; overflow: hidden; border-radius: 1.5rem; background: #000; }
+        .vision-bg { 
+            position: absolute; inset: 0; width: 100%; height: 100%; 
+            background-size: cover; background-position: center; 
+            transition: filter 0.6s ease, transform 10s linear;
+            z-index: 1;
+            transform: scale(1.1);
+        }
+        .animate-flow { animation: slowPan 20s infinite alternate; }
+        @keyframes slowPan {
+            0% { transform: scale(1.1) translate(0, 0); }
+            100% { transform: scale(1.3) translate(-2%, -2%); }
+        }
+        .low-res { filter: blur(15px) saturate(0.6) contrast(0.8); }
+        
+        .ai-boost-btn {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.7);
+            z-index: 50;
+        }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
     </style>
@@ -20,161 +39,80 @@
 
     <!-- 左侧导航 -->
     <aside class="w-64 glass-dark rounded-[2rem] flex flex-col p-6 z-50">
-        <div class="text-2xl font-black text-blue-500 mb-10 tracking-tighter">宽石网 <span class="text-[10px] bg-blue-600 text-white px-2 py-1 rounded ml-2">DEV</span></div>
+        <div class="text-2xl font-black text-blue-500 mb-10 tracking-tighter uppercase">Kuanshi <span class="text-[10px] bg-blue-600 text-white px-2 py-1 rounded ml-2">Vision</span></div>
         <nav class="flex-1 space-y-4">
             <a href="#" class="flex items-center space-x-3 p-3 rounded-xl bg-blue-600 text-white font-bold transition"><span>🏠</span> <span>推荐流</span></a>
-            <a href="#" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 text-gray-400 hover:text-white transition"><span>🔥</span> <span>热门趋势</span></a>
-            <a href="#" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 text-gray-400 hover:text-white transition"><span>👤</span> <span>个人中心</span></a>
+            <a href="#" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 text-gray-400 hover:text-white transition"><span>✨</span> <span>AI 增强库</span></a>
+            <a href="#" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 text-gray-400 hover:text-white transition"><span>👤</span> <span>视觉大使</span></a>
         </nav>
         <div class="mt-auto pt-6 border-t border-white/10">
-            <button onclick="openUpload()" class="w-full py-3 rounded-xl blue-gradient font-bold text-sm hover:scale-105 transition"> + 上传视频</button>
+            <button class="w-full py-3 rounded-xl blue-gradient font-bold text-sm hover:scale-105 transition"> + 上传素材</button>
         </div>
     </aside>
 
-    <!-- 中间主内容 -->
+    <!-- 中间视觉主区 -->
     <main class="flex-1 flex flex-col gap-4">
-        <div class="video-container shadow-2xl relative">
-            <video id="main-video" class="main-video" autoplay muted loop playsinline></video>
+        <div class="vision-container shadow-2xl relative">
+            <!-- 这里的 url 替换为你上传到 GitHub 后的模特图路径，或者先用这张图的临时链接 -->
+            <div id="main-visual" class="vision-bg low-res animate-flow" style="background-image: url('https://images.unsplash.com/photo-1611162617213-6d562f266557?auto=format&fit=crop&w=800&q=80');"></div>
             
             <div class="absolute right-6 top-1/2 transform -translate-y-1/2 z-20 flex flex-col space-y-6 items-center">
-                <div class="flex flex-col items-center space-y-1 cursor-pointer" onclick="likeVideo()">
-                    <div id="like-btn" class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center text-xl transition duration-300">❤️</div>
-                    <div id="like-count" class="text-xs">1.2k</div>
+                <div class="flex flex-col items-center space-y-1 cursor-pointer">
+                    <div class="w-12 h-12 rounded-full bg-gray-800 border-2 border-white overflow-hidden"><img src="https://i.pravatar.cc/100?img=1"></div>
+                    <div class="text-xs">❤️ 1.2w</div>
                 </div>
                 <div class="flex flex-col items-center space-y-1">
                     <div class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center text-xl">💬</div>
-                    <div class="text-xs">452</div>
+                    <div class="text-xs">856</div>
                 </div>
-                <button onclick="toggleBoost()" class="ai-boost-btn p-4 rounded-full blue-gradient shadow-lg hover:scale-110 transition animate-bounce text-xs font-bold">🪄 AI Boost</button>
+                <button onclick="toggleBoost()" class="ai-boost-btn p-4 rounded-full shadow-lg hover:scale-110 transition animate-bounce text-xs font-bold">🪄 AI Boost</button>
             </div>
 
-            <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black to-transparent z-10">
+            <div class="absolute bottom-0 left-0 w-full p-10 bg-gradient-to-t from-black to-transparent z-10">
                 <div class="flex items-center space-x-3 mb-2">
-                    <img id="user-avatar" src="" class="w-10 h-10 rounded-full border-2 border-blue-500">
-                    <span id="user-name" class="font-bold"></span>
+                    <img src="https://i.pravatar.cc/100?img=1" class="w-10 h-10 rounded-full border-2 border-blue-500">
+                    <span class="font-bold text-lg">首席视觉大使 @Model_Vision</span>
                 </div>
-                <p id="video-desc" class="text-gray-300 text-sm max-w-md"></p>
+                <p class="text-gray-300 text-sm max-w-md leading-relaxed">
+                    将纯净之美与 AI 增强技术完美结合。在宽石网，我们定义 8K 的视觉标准。✨ #AI视觉 #纯净美学
+                </p>
             </div>
         </div>
         <div class="flex justify-center space-x-4 py-2">
-            <button onclick="changeVideo(-1)" class="px-6 py-2 rounded-full glass-dark hover:bg-white/20 transition">上一个</button>
-            <button onclick="changeVideo(1)" class="px-6 py-2 rounded-full glass-dark hover:bg-white/20 transition">下一个</button>
+            <div class="px-6 py-2 rounded-full glass-dark text-xs text-gray-400">当前模式：AI 视觉增强模拟</div>
         </div>
     </main>
 
-    <!-- 右侧社交 -->
+    <!-- 右侧社交面板 -->
     <aside class="w-80 glass-dark rounded-[2rem] flex flex-col overflow-hidden z-50">
-        <div class="p-6 border-b border-white/10 font-bold text-lg">实时对话流</div>
-        <div id="chat-box" class="flex-1 overflow-y-auto p-6 space-y-4 text-sm"></div>
+        <div class="p-6 border-b border-white/10 font-bold text-lg">实时共鸣</div>
+        <div id="chat-box" class="flex-1 overflow-y-auto p-6 space-y-4 text-sm">
+            <div class="flex space-x-3">
+                <div class="w-8 h-8 rounded-full bg-blue-500 flex-shrink-0"></div>
+                <div class="bg-white/10 p-3 rounded-2xl rounded-tl-none">
+                    <p class="font-bold text-blue-400 text-xs">系统提示</p>
+                    <p>欢迎体验宽石网视觉大使模式。点击 AI Boost 见证奇迹。</p>
+                </div>
+            </div>
+        </div>
         <div class="p-4 bg-black/20 flex space-x-2">
-            <input id="chat-input" type="text" placeholder="输入消息..." class="flex-1 bg-white/10 border border-white/20 rounded-full px-4 py-2 text-sm outline-none text-white">
+            <input id="chat-input" type="text" placeholder="输入感受..." class="flex-1 bg-white/10 border border-white/20 rounded-full px-4 py-2 text-sm outline-none text-white">
             <button onclick="sendMsg()" class="bg-blue-600 p-2 rounded-full hover:bg-blue-500 transition">➡️</button>
         </div>
     </aside>
 
-    <!-- 上传模态窗 -->
-    <div id="upload-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] hidden flex items-center justify-center">
-        <div class="glass-dark w-full max-w-md p-10 rounded-[3rem] text-center">
-            <h2 class="text-2xl font-bold mb-6">宽石云端上传</h2>
-            <div id="drop-zone" class="border-2 border-dashed border-blue-500/30 p-10 rounded-3xl mb-6 cursor-pointer hover:bg-blue-500/10 transition" onclick="startUpload()">
-                <div class="text-4xl mb-4">☁️</div>
-                <p class="text-gray-400 text-sm">点击选择 8K 原片素材</p>
-            </div>
-            <div id="upload-status" class="hidden">
-                <div class="w-full bg-gray-700 h-2 rounded-full mb-4 overflow-hidden"><div id="progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-200"></div></div>
-                <p id="progress-text" class="text-xs text-blue-400 animate-pulse">正在进行 AI 8K 增强处理...</p>
-            </div>
-            <button onclick="closeUpload()" class="mt-6 text-gray-500 text-xs">取消</button>
-        </div>
-    </div>
-
     <script>
-        // --- 数据中心 (Mock Database) ---
-        const videoDB = [
-            { id: 1, url: "https://cdn.pixabay.com/video/2020_04_16-13_14_24-23253_480p_alt_type_video.mp4", user: "@AI_Visionary", avatar: "https://i.pravatar.cc/100?img=1", desc: "定义视觉极限，体验 8K 纯净世界。", likes: 1200, boosted: false },
-            { id: 2, url: "https://cdn.pixabay.com/video/2023_05_23/17/53/25-6222-dl.mp4", user: "@CyberWorld", avatar: "https://i.pravatar.cc/100?img=2", desc: "未来已至，AI 让每一帧都成为电影。", likes: 856, boosted: false },
-            { id: 3, url: "https://cdn.pixabay.com/video/2021_05_03/16/43/210154-5C6001736_480p.mp4", user: "@NaturePure", avatar: "https://i.pravatar.cc/100?img=3", desc: "捕捉自然的呼吸，AI 增强真实之美。", likes: 2100, boosted: false }
-        ];
-
-        let currentIdx = 0;
-
-        // --- 核心逻辑 ---
-        function initApp() {
-            renderVideo();
-            addSystemMsg("欢迎进入宽石网开发者版。所有操作均在模拟实时运行中。");
-        }
-
-        function renderVideo() {
-            const video = videoDB[currentIdx];
-            const vElem = document.getElementById('main-video');
-            vElem.src = video.url;
-            vElem.classList.toggle('low-res', !video.boosted);
-            document.getElementById('user-name').innerText = video.user;
-            document.getElementById('user-avatar').src = video.avatar;
-            document.getElementById('video-desc').innerText = video.desc;
-            document.getElementById('like-count').innerText = (video.likes/1000).toFixed(1) + 'k';
-            document.getElementById('like-btn').style.color = video.boosted ? '#3b82f6' : 'white';
-            vElem.play();
-        }
-
-        function changeVideo(dir) {
-            currentIdx = (currentIdx + dir + videoDB.length) % videoDB.length;
-            renderVideo();
-        }
-
         function toggleBoost() {
-            videoDB[currentIdx].boosted = !videoDB[currentIdx].boosted;
-            document.getElementById('main-video').classList.toggle('low- la-res', !videoDB[currentIdx].boosted); // Fix logic
-            document.getElementById('main-video').classList.toggle('low-res');
+            document.getElementById('main-visual').classList.toggle('low-res');
         }
-
-        function likeVideo() {
-            videoDB[currentIdx].likes++;
-            document.getElementById('like-count').innerText = (videoDB[currentIdx].likes/1000).toFixed(1) + 'k';
-            document.getElementById('like-btn').classList.toggle('text-red-500');
-        }
-
         function sendMsg() {
             const input = document.getElementById('chat-input');
             if(!input.value) return;
-            addMsg(input.value, true);
-            input.value = '';
-        }
-
-        function addMsg(text, isMe) {
             const box = document.getElementById('chat-box');
-            const div = document.createElement('div');
-            div.className = `flex space-x-3 ${isMe ? 'justify-end' : ''}`;
-            div.innerHTML = isMe ? 
-                `<div class="bg-blue-600 p-3 rounded-2xl rounded-tr-none text-sm">${text}</div>` : 
-                `<div class="flex space-x-3"><div class="w-8 h-8 rounded-full bg-blue-500"></div><div class="bg-white/10 p-3 rounded-2xl rounded-tl-none text-sm"><p class="font-bold text-blue-400 text-xs">AI助手</p><p>${text}</p></div></div>`;
-            box.appendChild(div);
+            box.innerHTML += `<div class="flex space-x-3 justify-end"><div class="bg-blue-600 p-3 rounded-2xl rounded-tr-none text-sm">${input.value}</div></div>`;
+            input.value = '';
             box.scrollTop = box.scrollHeight;
         }
-
-        function addSystemMsg(text) { addMsg(text, false); }
-
-        function openUpload() { document.getElementById('upload-modal').classList.remove('hidden'); }
-        function closeUpload() { document.getElementById('upload-modal').classList.add('hidden'); }
-
-        function startUpload() {
-            document.getElementById('drop-zone').classList.add('hidden');
-            document.getElementById('upload-status').classList.remove('hidden');
-            let p = 0;
-            const int = setInterval(() => {
-                p += 5;
-                document.getElementById('progress-bar').style.width = p + '%';
-                if(p === 30) document.getElementById('progress-text').innerText = "AI 正在分析视频节奏...";
-                if(p === 60) document.getElementById('progress-text').innerText = "正在注入 8K 像素细节...";
-                if(p >= 100) {
-                    clearInterval(int);
-                    document.getElementById('progress-text').innerText = "上传成功！已进入 8K 队列";
-                    setTimeout(closeUpload, 1500);
-                }
-            }, 100);
-        }
-
-        initApp();
     </script>
 </body>
 </html>
